@@ -1,13 +1,17 @@
 package com.leaolabs.scheduling.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "scheduling")
 public class Scheduling {
@@ -20,7 +24,7 @@ public class Scheduling {
     private ZonedDateTime schedulingDate;
 
     @Column(name = "transfer_date")
-    private ZonedDateTime transferDate;
+    private LocalDate transferDate;
 
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
@@ -30,6 +34,6 @@ public class Scheduling {
 
     @PrePersist
     protected void prePersist() {
-        createdAt = updatedAt = ZonedDateTime.now();
+        schedulingDate = createdAt = updatedAt = ZonedDateTime.now();
     }
 }

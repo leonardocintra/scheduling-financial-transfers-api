@@ -1,7 +1,6 @@
 package com.leaolabs.scheduling.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -10,6 +9,9 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "customer")
 public class Customer {
 
@@ -17,12 +19,9 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 100)
     @Column(nullable = false)
     private String name;
 
-    @Size(max = 11)
-    @Size(min = 11)
     @Column(nullable = false)
     private String cpf;
 

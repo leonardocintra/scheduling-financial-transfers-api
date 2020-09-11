@@ -1,11 +1,6 @@
 package com.leaolabs.scheduling.v1.dtos;
 
-import com.leaolabs.scheduling.model.Customer;
-import com.leaolabs.scheduling.model.Scheduling;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,6 +9,7 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class TransferContractDto implements Serializable {
 
@@ -25,9 +21,9 @@ public class TransferContractDto implements Serializable {
 
     private BigDecimal amount;
 
-    private Customer customer;
+    private CustomerDto customer;
 
-    private Scheduling scheduling;
+    private SchedulingDto scheduling;
 
     private ZonedDateTime createdAt;
 

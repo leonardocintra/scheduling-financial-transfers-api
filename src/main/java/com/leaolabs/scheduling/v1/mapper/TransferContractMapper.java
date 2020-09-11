@@ -1,6 +1,10 @@
 package com.leaolabs.scheduling.v1.mapper;
 
+import com.leaolabs.scheduling.model.Customer;
+import com.leaolabs.scheduling.model.Scheduling;
 import com.leaolabs.scheduling.model.TransferContract;
+import com.leaolabs.scheduling.v1.dtos.CustomerDto;
+import com.leaolabs.scheduling.v1.dtos.SchedulingDto;
 import com.leaolabs.scheduling.v1.dtos.TransferContractDto;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +24,16 @@ public class TransferContractMapper {
                 .accountOrigin(transferContract.getAccountOrigin())
                 .accountTarget(transferContract.getAccountTarget())
                 .amount(transferContract.getAmount())
-                .customer(transferContract.getCustomer())
-                .scheduling(transferContract.getScheduling())
+                .customer(CustomerDto.builder()
+                        .id(transferContract.getCustomer().getId())
+                        .cpf(transferContract.getCustomer().getCpf())
+                        .name(transferContract.getCustomer().getName())
+                        .build())
+                .scheduling(SchedulingDto.builder()
+                        .id(transferContract.getScheduling().getId())
+                        .schedulingDate(transferContract.getScheduling().getSchedulingDate())
+                        .transferDate(transferContract.getScheduling().getTransferDate())
+                        .build())
                 .updatedAt(transferContract.getUpdatedAt())
                 .createdAt(transferContract.getCreatedAt())
                 .build();
@@ -43,8 +55,20 @@ public class TransferContractMapper {
                 .accountOrigin(transferContractDto.getAccountOrigin())
                 .accountTarget(transferContractDto.getAccountTarget())
                 .amount(transferContractDto.getAmount())
-                .customer(transferContractDto.getCustomer())
-                .scheduling(transferContractDto.getScheduling())
+                .customer(Customer.builder()
+                        .id(transferContractDto.getCustomer().getId())
+                        .cpf(transferContractDto.getCustomer().getCpf())
+                        .name(transferContractDto.getCustomer().getName())
+                        .createdAt(transferContractDto.getCreatedAt())
+                        .updatedAt(transferContractDto.getUpdatedAt())
+                        .build())
+                .scheduling(Scheduling.builder()
+                        .id(transferContractDto.getScheduling().getId())
+                        .schedulingDate(transferContractDto.getScheduling().getSchedulingDate())
+                        .transferDate(transferContractDto.getScheduling().getTransferDate())
+                        .createdAt(transferContractDto.getCreatedAt())
+                        .updatedAt(transferContractDto.getUpdatedAt())
+                        .build())
                 .createdAt(transferContractDto.getCreatedAt())
                 .updatedAt(transferContractDto.getUpdatedAt())
                 .build();

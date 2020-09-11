@@ -1,9 +1,6 @@
 package com.leaolabs.scheduling.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,8 +13,9 @@ import java.time.ZonedDateTime;
 @Setter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "account")
+@Table(name = "transfer_contract")
 public class TransferContract {
 
     @Id
@@ -35,7 +33,7 @@ public class TransferContract {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
