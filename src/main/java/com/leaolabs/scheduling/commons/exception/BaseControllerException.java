@@ -2,8 +2,6 @@ package com.leaolabs.scheduling.commons.exception;
 
 public class BaseControllerException extends RuntimeException {
 
-    private static final long serialVersionUID = 6011730611178683208L;
-
     private final Object[] parameters;
 
     public BaseControllerException(final Object... parameters) {

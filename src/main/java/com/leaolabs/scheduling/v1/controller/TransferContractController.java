@@ -4,6 +4,7 @@ import com.leaolabs.scheduling.business.TransferContractBusiness;
 import com.leaolabs.scheduling.commons.controller.BaseController;
 import com.leaolabs.scheduling.commons.controller.ResponseMeta;
 import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
+import com.leaolabs.scheduling.v1.dtos.CustomerDto;
 import com.leaolabs.scheduling.v1.dtos.TransferContractDto;
 import com.leaolabs.scheduling.v1.mapper.TransferContractMapper;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,18 @@ public class TransferContractController extends BaseController {
     public TransferContractController(final TransferContractBusiness transferContractBusiness, final TransferContractMapper transferContractMapper) {
         this.transferContractBusiness = transferContractBusiness;
         this.transferContractMapper = transferContractMapper;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/customer")
+    public ResponseEntity<ResponseMeta> findByCustomerCpf(@RequestParam(value = "cpf", required = true) String cpf) {
+        final var optionalTransferContract =
+                this.transferContractBusiness.findByCustomerCpf(cpf);
+
+        final var transferContractDto =
+                this.transferContractMapper.serialize(optionalTransferContract.get());
+
+        return super.buildResponse(HttpStatus.OK, Optional.of(transferContractDto));
     }
 
     @ResponseBody

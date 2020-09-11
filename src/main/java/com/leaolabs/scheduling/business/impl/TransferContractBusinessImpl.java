@@ -1,6 +1,7 @@
 package com.leaolabs.scheduling.business.impl;
 
 import com.leaolabs.scheduling.business.TransferContractBusiness;
+import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
 import com.leaolabs.scheduling.model.Customer;
 import com.leaolabs.scheduling.model.Scheduling;
 import com.leaolabs.scheduling.model.TransferContract;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +39,15 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
         return Optional.of(this.transferContractRepository.save(transferContract));
     }
 
+    @Override
+    public Optional<List<TransferContract>> findByCustomerCpf(String cpf) {
+        var optionalCustomer = this.customerRepository.findByCpf(cpf)
+                .orElseThrow(() -> new EntityNotFoundException("Customer"));
+
+        return Optional.of(this.transferContractRepository.findByCustomerId(optionalCustomer.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Transfer Contract")));
+    }
+
     private Customer getCustomer(final TransferContract transferContract) {
         final String cpf = transferContract.getCustomer().getCpf();
 
@@ -52,10 +63,5 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
             customer = optionalCustomer.get();
         }
         return customer;
-    }
-
-    @Override
-    public Optional<TransferContract> findByCustomerCpf(String cpf) {
-        return Optional.empty();
     }
 }
