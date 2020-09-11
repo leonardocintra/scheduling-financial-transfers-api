@@ -1,21 +1,26 @@
 package com.leaolabs.scheduling.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-@Entity
-@Table(name = "customer")
 @Getter
-public class Customer {
+@Setter
+@Entity
+@Table(name = "scheduling")
+public class Scheduling {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "scheduling_date")
+    private ZonedDateTime schedulingDate;
+
+    @Column(name = "transfer_date")
+    private ZonedDateTime transferDate;
 
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
@@ -28,4 +33,3 @@ public class Customer {
         createdAt = updatedAt = ZonedDateTime.now();
     }
 }
-
