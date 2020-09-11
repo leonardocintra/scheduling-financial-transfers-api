@@ -1,6 +1,10 @@
 # API Scheduling Financial Transfers
-Scheduling Financial Transfers API
+![image](https://media.giphy.com/media/ADgfsbHcS62Jy/giphy.gif)
+
 
 ## How to use
 ### Requisites
 - Java 14
+
+
+

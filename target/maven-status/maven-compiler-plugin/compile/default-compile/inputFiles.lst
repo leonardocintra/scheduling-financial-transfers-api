@@ -1,1 +1,10 @@
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/business/impl/TransferContractBusinessImpl.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/model/TransferContract.java
 /home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/SchedulingApplication.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/model/Customer.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/model/Scheduling.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/v1/dtos/TransferContractDto.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/model/Tax.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/business/TransferContractBusiness.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/repository/TransferContractRepository.java
+/home/leonardo/Github/scheduling-financial-transfers-api/src/main/java/com/leaolabs/scheduling/v1/controller/TransferContractController.java

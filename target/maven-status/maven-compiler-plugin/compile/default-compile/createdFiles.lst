@@ -1,1 +1,10 @@
+com/leaolabs/scheduling/repository/TransferContractRepository.class
+com/leaolabs/scheduling/model/Tax.class
+com/leaolabs/scheduling/v1/controller/TransferContractController.class
+com/leaolabs/scheduling/model/Scheduling.class
+com/leaolabs/scheduling/business/TransferContractBusiness.class
+com/leaolabs/scheduling/model/TransferContract.class
+com/leaolabs/scheduling/model/Customer.class
 com/leaolabs/scheduling/SchedulingApplication.class
+com/leaolabs/scheduling/v1/dtos/TransferContractDto.class
+com/leaolabs/scheduling/business/impl/TransferContractBusinessImpl.class

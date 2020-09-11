@@ -1,7 +1,11 @@
 package com.leaolabs.scheduling.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -10,6 +14,8 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
 @Entity
 @Table(name = "account")
 public class TransferContract {
@@ -28,6 +34,16 @@ public class TransferContract {
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "customer_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Customer customer;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "scheduling_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Scheduling scheduling;
 
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
