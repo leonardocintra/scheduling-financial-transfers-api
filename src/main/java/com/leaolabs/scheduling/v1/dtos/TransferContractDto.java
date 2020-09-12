@@ -2,6 +2,7 @@ package com.leaolabs.scheduling.v1.dtos;
 
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,6 +34,8 @@ public class TransferContractDto implements Serializable {
     @NotNull
     private BigDecimal amount;
 
+    @NotNull
+    @Valid
     private CustomerDto customer;
 
     private SchedulingDto scheduling;

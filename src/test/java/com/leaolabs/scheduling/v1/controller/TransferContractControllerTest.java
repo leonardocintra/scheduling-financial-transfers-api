@@ -33,6 +33,160 @@ public class TransferContractControllerTest {
     static final MediaType JSON = MediaType.APPLICATION_JSON;
     static final String BIG_STRING = "aaaaaaaaaaaaa bbbbbbbbbbbbbbb cccccccccccc dddddddddd eeeeeeeeee fffffffffffff ggggggggggggg hhhhhhhhhh";
 
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerCpfHasTooLesserDescription()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().name("Leonardo Nascimento Cintra").cpf("111").build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Invalid body parameter customer.cpf - it must be filled with a value greater or equals than 11")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Invalid field customer.cpf - it must be filled with a value greater or equals than 11")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerCpfHasTooLongDescription()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().name("Leonardo Nascimento Cintra").cpf(BIG_STRING).build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Invalid body parameter customer.cpf - it must be filled with a value lesser or equals than 11")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Invalid field customer.cpf - it must be filled with a value lesser or equals than 11")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerNameHasTooLongDescription()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().name(BIG_STRING).cpf("11122233345").build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Invalid body parameter customer.name - it must be filled with a value lesser or equals than 100")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Invalid field customer.name - it must be filled with a value lesser or equals than 100")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerCpfMissing()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().name("Test Name").build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Missing body parameter customer.cpf")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field customer.cpf is required and can not be empty")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerNameIsEmptyString()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().name("").cpf("11122233387").build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Missing body parameter customer.name")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field customer.name is required and can not be empty")))
+                .andReturn()
+                .getResponse();
+    }
+    
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerNameMissing()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(CustomerDto.builder().build())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Missing body parameter customer.name")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field customer.name is required and can not be empty")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerMissing()  {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Missing body parameter customer")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field customer is required and can not be empty")))
+                .andReturn()
+                .getResponse();
+    }
+
     @Test
     @SneakyThrows
     public void whenCreateTransferContractAndAmountHasLessThanOne()  {
