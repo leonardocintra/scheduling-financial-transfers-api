@@ -64,6 +64,14 @@ public class BaseControllerAdvice {
                                         format("Field {0} is required and can not be empty", field.getField()))
                                 .build());
 
+            } else if ("FutureOrPresent".equalsIgnoreCase(field.getCode())) {
+                errorMessages.add(
+                        ResponseMeta.ErrorMessage.builder()
+                                .developerMessage(
+                                        format("Field {0} cannot be in the past", field.getField()))
+                                .userMessage(
+                                        format("Field {0} cannot be in the past", field.getField()))
+                                .build());
             } else if ("DecimalMin".equalsIgnoreCase(field.getCode())) {
                 errorMessages.add(
                         ResponseMeta.ErrorMessage.builder()

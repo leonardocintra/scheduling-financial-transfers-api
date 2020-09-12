@@ -19,10 +19,10 @@ public class Scheduling {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "scheduling_date")
+    @Column(name = "scheduling_date", nullable = false)
     private ZonedDateTime schedulingDate;
 
-    @Column(name = "transfer_date")
+    @Column(name = "transfer_date", nullable = false)
     private LocalDate transferDate;
 
     @Column(name = "created_at")

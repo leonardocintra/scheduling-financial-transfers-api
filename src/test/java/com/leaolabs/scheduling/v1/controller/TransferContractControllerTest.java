@@ -14,7 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +39,106 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerCpfHasTooLesserDescription()  {
+    public void whenCreateTransferContractSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenFindTransferContractSuccessByCustomerCPF() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andReturn()
+                .getResponse();
+
+        final var cpf = getFakeCustomerDto().getCpf();
+
+        this.mockMvc.perform(get(URI + "/customer?cpf=" + cpf)
+                .contentType(JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndSchedulingHasMissing() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(SchedulingDto.builder().build())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Missing body parameter scheduling.transferDate")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field scheduling.transferDate is required and can not be empty")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndSchedulingHasInThePast() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(SchedulingDto.builder().transferDate(LocalDate.now().plusDays(-10)).build())
+                .amount(BigDecimal.TEN)
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Field scheduling.transferDate cannot be in the past")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("Field scheduling.transferDate cannot be in the past")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractAndCustomerCpfHasTooLesserDescription() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -58,7 +160,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerCpfHasTooLongDescription()  {
+    public void whenCreateTransferContractAndCustomerCpfHasTooLongDescription() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -80,7 +182,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerNameHasTooLongDescription()  {
+    public void whenCreateTransferContractAndCustomerNameHasTooLongDescription() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -102,7 +204,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerCpfMissing()  {
+    public void whenCreateTransferContractAndCustomerCpfMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -124,7 +226,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerNameIsEmptyString()  {
+    public void whenCreateTransferContractAndCustomerNameIsEmptyString() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -143,15 +245,15 @@ public class TransferContractControllerTest {
                 .andReturn()
                 .getResponse();
     }
-    
+
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerNameMissing()  {
+    public void whenCreateTransferContractAndCustomerNameMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
                 .accountOrigin("898989")
-                .customer(CustomerDto.builder().build())
+                .customer(CustomerDto.builder().cpf("11111122234").build())
                 .scheduling(getFakeSchedulingDto())
                 .amount(BigDecimal.TEN)
                 .build();
@@ -168,7 +270,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndCustomerMissing()  {
+    public void whenCreateTransferContractAndCustomerMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -189,7 +291,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAmountHasLessThanOne()  {
+    public void whenCreateTransferContractAndAmountHasLessThanOne() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -211,7 +313,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAmountHasZero()  {
+    public void whenCreateTransferContractAndAmountHasZero() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -233,7 +335,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAmountHasMissing()  {
+    public void whenCreateTransferContractAndAmountHasMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
@@ -254,7 +356,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountTargetHasEmptyString()  {
+    public void whenCreateTransferContractAndAccountTargetHasEmptyString() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("")
@@ -276,7 +378,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountTargetHasMissing()  {
+    public void whenCreateTransferContractAndAccountTargetHasMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountOrigin("3898")
@@ -297,7 +399,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountTargetHasTooLongDescription()  {
+    public void whenCreateTransferContractAndAccountTargetHasTooLongDescription() {
 
         var dto = TransferContractDto.builder()
                 .accountOrigin("3232")
@@ -319,7 +421,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountOriginHasEmptyString()  {
+    public void whenCreateTransferContractAndAccountOriginHasEmptyString() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("11111")
@@ -341,7 +443,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountOriginHasMissing()  {
+    public void whenCreateTransferContractAndAccountOriginHasMissing() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("11111")
@@ -362,7 +464,7 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractAndAccountOriginHasTooLongDescription()  {
+    public void whenCreateTransferContractAndAccountOriginHasTooLongDescription() {
 
         var dto = TransferContractDto.builder()
                 .accountOrigin(BIG_STRING)
@@ -383,7 +485,9 @@ public class TransferContractControllerTest {
     }
 
     private SchedulingDto getFakeSchedulingDto() {
-        return SchedulingDto.builder().build();
+        return SchedulingDto.builder()
+                .transferDate(LocalDate.now())
+                .build();
     }
 
     private CustomerDto getFakeCustomerDto() {

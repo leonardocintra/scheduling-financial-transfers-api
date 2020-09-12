@@ -40,6 +40,11 @@ public class TransferContract {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Scheduling scheduling;
 
+    //@OneToOne(optional = false)
+    //@JoinColumn(name = "tax_id")
+    //@OnDelete(action = OnDeleteAction.CASCADE)
+    //private Tax tax;
+
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 

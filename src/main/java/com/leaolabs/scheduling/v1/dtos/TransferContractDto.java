@@ -38,6 +38,8 @@ public class TransferContractDto implements Serializable {
     @Valid
     private CustomerDto customer;
 
+    @NotNull
+    @Valid
     private SchedulingDto scheduling;
 
     private ZonedDateTime createdAt;
