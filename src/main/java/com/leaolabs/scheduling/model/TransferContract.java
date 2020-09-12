@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -22,11 +21,9 @@ public class TransferContract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 10)
     @Column(name = "account_origin", nullable = false)
     private String accountOrigin;
 
-    @Size(max = 10)
     @Column(name = "account_target", nullable = false)
     private String accountTarget;
 

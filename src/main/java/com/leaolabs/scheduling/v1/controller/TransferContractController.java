@@ -4,7 +4,6 @@ import com.leaolabs.scheduling.business.TransferContractBusiness;
 import com.leaolabs.scheduling.commons.controller.BaseController;
 import com.leaolabs.scheduling.commons.controller.ResponseMeta;
 import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
-import com.leaolabs.scheduling.v1.dtos.CustomerDto;
 import com.leaolabs.scheduling.v1.dtos.TransferContractDto;
 import com.leaolabs.scheduling.v1.mapper.TransferContractMapper;
 import org.springframework.http.HttpStatus;

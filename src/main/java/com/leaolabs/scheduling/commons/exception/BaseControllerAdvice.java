@@ -64,6 +64,21 @@ public class BaseControllerAdvice {
                                         format("Field {0} is required and can not be empty", field.getField()))
                                 .build());
 
+            } else if ("DecimalMin".equalsIgnoreCase(field.getCode())) {
+                errorMessages.add(
+                        ResponseMeta.ErrorMessage.builder()
+                                .developerMessage(
+                                        format(
+                                                "Invalid body parameter {0}"
+                                                        + " - it must be filled with a value greater than {1}",
+                                                field.getField(),
+                                                field.getRejectedValue()))
+                                .userMessage(
+                                        format(
+                                                "Invalid field {0} - it must be filled with a value greater than {1}",
+                                                field.getField(),
+                                                field.getRejectedValue()))
+                                .build());
             } else if ("Min".equalsIgnoreCase(field.getCode())) {
 
                 errorMessages.add(
