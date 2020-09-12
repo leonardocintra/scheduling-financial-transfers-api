@@ -30,6 +30,9 @@ public class TransferContract {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = false)
+    private BigDecimal totalPaid;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -40,10 +43,10 @@ public class TransferContract {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Scheduling scheduling;
 
-    //@OneToOne(optional = false)
-    //@JoinColumn(name = "tax_id")
-    //@OnDelete(action = OnDeleteAction.CASCADE)
-    //private Tax tax;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "tax_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Tax tax;
 
     @Column(name = "created_at")
     private ZonedDateTime createdAt;

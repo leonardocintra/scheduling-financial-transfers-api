@@ -5,6 +5,7 @@ import com.leaolabs.scheduling.model.Scheduling;
 import com.leaolabs.scheduling.model.TransferContract;
 import com.leaolabs.scheduling.v1.dtos.CustomerDto;
 import com.leaolabs.scheduling.v1.dtos.SchedulingDto;
+import com.leaolabs.scheduling.v1.dtos.TaxDto;
 import com.leaolabs.scheduling.v1.dtos.TransferContractDto;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class TransferContractMapper {
                 .accountOrigin(transferContract.getAccountOrigin())
                 .accountTarget(transferContract.getAccountTarget())
                 .amount(transferContract.getAmount())
+                .totalPaid(transferContract.getTotalPaid())
                 .customer(CustomerDto.builder()
                         .id(transferContract.getCustomer().getId())
                         .cpf(transferContract.getCustomer().getCpf())
@@ -33,6 +35,11 @@ public class TransferContractMapper {
                         .id(transferContract.getScheduling().getId())
                         .schedulingDate(transferContract.getScheduling().getSchedulingDate())
                         .transferDate(transferContract.getScheduling().getTransferDate())
+                        .build())
+                .tax(TaxDto.builder()
+                        .id(transferContract.getTax().getId())
+                        .amount(transferContract.getTax().getAmount())
+                        .taxDescription(transferContract.getTax().getTaxDescription())
                         .build())
                 .updatedAt(transferContract.getUpdatedAt())
                 .createdAt(transferContract.getCreatedAt())

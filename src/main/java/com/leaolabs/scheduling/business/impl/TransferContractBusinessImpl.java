@@ -1,9 +1,11 @@
 package com.leaolabs.scheduling.business.impl;
 
+import com.leaolabs.scheduling.business.TaxBusiness;
 import com.leaolabs.scheduling.business.TransferContractBusiness;
 import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
 import com.leaolabs.scheduling.model.Customer;
 import com.leaolabs.scheduling.model.Scheduling;
+import com.leaolabs.scheduling.model.Tax;
 import com.leaolabs.scheduling.model.TransferContract;
 import com.leaolabs.scheduling.repository.CustomerRepository;
 import com.leaolabs.scheduling.repository.SchedulingRepository;
@@ -11,6 +13,7 @@ import com.leaolabs.scheduling.repository.TransferContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,8 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
     private SchedulingRepository schedulingRepository;
     @Autowired
     private TransferContractRepository transferContractRepository;
+    @Autowired
+    private TaxBusiness taxBusiness;
 
     @Override
     public Optional<TransferContract> create(final TransferContract transferContract) {
@@ -33,8 +38,14 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
                 .transferDate(transferContract.getScheduling().getTransferDate())
                 .build());
 
+        var tax = this.taxBusiness.create(getTax(transferContract));
+        var totalPaid = Double.parseDouble(tax.getAmount().toString())
+                + Double.parseDouble(transferContract.getAmount().toString());
+
         transferContract.setScheduling(scheduling);
         transferContract.setCustomer(customer);
+        transferContract.setTax(tax);
+        transferContract.setTotalPaid(BigDecimal.valueOf(totalPaid));
 
         return Optional.of(this.transferContractRepository.save(transferContract));
     }
@@ -63,5 +74,13 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
             customer = optionalCustomer.get();
         }
         return customer;
+    }
+
+    private Tax getTax(final TransferContract transferContract) {
+        var tax = taxBusiness.caculate(transferContract);
+        if (Optional.ofNullable(tax).isEmpty()) {
+            throw new EntityNotFoundException("Tax");
+        }
+        return tax;
     }
 }

@@ -34,6 +34,8 @@ public class TransferContractDto implements Serializable {
     @NotNull
     private BigDecimal amount;
 
+    private BigDecimal totalPaid;
+
     @NotNull
     @Valid
     private CustomerDto customer;
@@ -41,6 +43,8 @@ public class TransferContractDto implements Serializable {
     @NotNull
     @Valid
     private SchedulingDto scheduling;
+
+    private TaxDto tax;
 
     private ZonedDateTime createdAt;
 

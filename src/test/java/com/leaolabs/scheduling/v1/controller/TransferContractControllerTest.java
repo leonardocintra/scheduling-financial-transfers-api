@@ -39,14 +39,14 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
-    public void whenCreateTransferContractSuccess() {
+    public void whenCreateTransferContractWhenTransferTodaySuccess() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
                 .scheduling(getFakeSchedulingDto())
-                .amount(BigDecimal.TEN)
+                .amount(BigDecimal.valueOf(3000.00))
                 .build();
 
         this.mockMvc.perform(post(URI)
@@ -56,6 +56,8 @@ public class TransferContractControllerTest {
                 .andExpect(jsonPath("$.records", hasSize(1)))
                 .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
                 .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3093.00)))
                 .andReturn()
                 .getResponse();
     }

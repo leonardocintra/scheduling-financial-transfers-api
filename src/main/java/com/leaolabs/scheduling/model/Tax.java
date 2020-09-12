@@ -1,8 +1,6 @@
 package com.leaolabs.scheduling.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,6 +8,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tax")
 public class Tax {
@@ -22,5 +22,5 @@ public class Tax {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private String percentage;
+    private String taxDescription;
 }
