@@ -1,11 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.leaolabs.scheduling.v1.controller.TransferContractControllerTest
 -------------------------------------------------------------------------------
-Tests run: 16, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.235 s <<< FAILURE! - in com.leaolabs.scheduling.v1.controller.TransferContractControllerTest
-whenCreateTransferContractAndCustomerNameMissing  Time elapsed: 0.024 s  <<< FAILURE!
-java.lang.AssertionError: 
-JSON path "$.[0].developerMessage"
-Expected: is "Missing body parameter customer.name"
-     but: was "Missing body parameter customer.cpf"
-	at com.leaolabs.scheduling.v1.controller.TransferContractControllerTest.whenCreateTransferContractAndCustomerNameMissing(TransferContractControllerTest.java:163)
-
+Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.358 s - in com.leaolabs.scheduling.v1.controller.TransferContractControllerTest

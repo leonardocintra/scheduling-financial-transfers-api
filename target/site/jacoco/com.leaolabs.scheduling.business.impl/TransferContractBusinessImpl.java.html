@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransferContractBusinessImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scheduling</a> &gt; <a href="index.source.html" class="el_package">com.leaolabs.scheduling.business.impl</a> &gt; <span class="el_source">TransferContractBusinessImpl.java</span></div><h1>TransferContractBusinessImpl.java</h1><pre class="source lang-java linenums">package com.leaolabs.scheduling.business.impl;
+
+import com.leaolabs.scheduling.business.TaxBusiness;
+import com.leaolabs.scheduling.business.TransferContractBusiness;
+import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
+import com.leaolabs.scheduling.model.Customer;
+import com.leaolabs.scheduling.model.Scheduling;
+import com.leaolabs.scheduling.model.Tax;
+import com.leaolabs.scheduling.model.TransferContract;
+import com.leaolabs.scheduling.repository.CustomerRepository;
+import com.leaolabs.scheduling.repository.SchedulingRepository;
+import com.leaolabs.scheduling.repository.TransferContractRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L22">public class TransferContractBusinessImpl implements TransferContractBusiness {</span>
+
+    @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
+    private SchedulingRepository schedulingRepository;
+    @Autowired
+    private TransferContractRepository transferContractRepository;
+
+    @Autowired
+    private TaxBusiness taxBusiness;
+
+    @Override
+    public Optional&lt;TransferContract&gt; create(final TransferContract transferContract) {
+<span class="fc" id="L36">        Customer customer = getCustomer(transferContract);</span>
+<span class="fc" id="L37">        Scheduling scheduling = this.schedulingRepository.save(Scheduling.builder()</span>
+<span class="fc" id="L38">                .schedulingDate(ZonedDateTime.now())</span>
+<span class="fc" id="L39">                .transferDate(transferContract.getScheduling().getTransferDate())</span>
+<span class="fc" id="L40">                .build());</span>
+
+<span class="fc" id="L42">        var tax = getTax(transferContract);</span>
+<span class="fc" id="L43">        var totalPaid = Double.parseDouble(tax.getAmount().toString())</span>
+<span class="fc" id="L44">                + Double.parseDouble(transferContract.getAmount().toString());</span>
+
+<span class="fc" id="L46">        transferContract.setScheduling(scheduling);</span>
+<span class="fc" id="L47">        transferContract.setCustomer(customer);</span>
+<span class="fc" id="L48">        transferContract.setTax(tax);</span>
+<span class="fc" id="L49">        transferContract.setTotalPaid(BigDecimal.valueOf(totalPaid));</span>
+
+<span class="fc" id="L51">        return Optional.of(this.transferContractRepository.save(transferContract));</span>
+    }
+
+    @Override
+    public Optional&lt;List&lt;TransferContract&gt;&gt; findByCustomerCpf(String cpf) {
+<span class="fc" id="L56">        var optionalCustomer = this.customerRepository.findByCpf(cpf)</span>
+<span class="pc" id="L57">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Customer&quot;));</span>
+
+<span class="fc" id="L59">        return Optional.of(this.transferContractRepository.findByCustomerId(optionalCustomer.getId())</span>
+<span class="pc" id="L60">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Transfer Contract&quot;)));</span>
+    }
+
+    private Customer getCustomer(final TransferContract transferContract) {
+<span class="fc" id="L64">        final String cpf = transferContract.getCustomer().getCpf();</span>
+
+<span class="fc" id="L66">        var optionalCustomer = this.customerRepository.findByCpf(cpf);</span>
+<span class="fc" id="L67">        var customer = new Customer();</span>
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (optionalCustomer.isEmpty()) {</span>
+<span class="fc" id="L70">            customer = this.customerRepository.save(Customer.builder()</span>
+<span class="fc" id="L71">                    .name(transferContract.getCustomer().getName())</span>
+<span class="fc" id="L72">                    .cpf(transferContract.getCustomer().getCpf())</span>
+<span class="fc" id="L73">                    .build());</span>
+        } else {
+<span class="fc" id="L75">            customer = optionalCustomer.get();</span>
+        }
+<span class="fc" id="L77">        return customer;</span>
+    }
+
+    private Tax getTax(final TransferContract transferContract) {
+<span class="fc" id="L81">        return this.taxBusiness.caculate(transferContract);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

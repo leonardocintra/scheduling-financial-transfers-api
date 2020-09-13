@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransferContractMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scheduling</a> &gt; <a href="index.source.html" class="el_package">com.leaolabs.scheduling.v1.mapper</a> &gt; <span class="el_source">TransferContractMapper.java</span></div><h1>TransferContractMapper.java</h1><pre class="source lang-java linenums">package com.leaolabs.scheduling.v1.mapper;
+
+import com.leaolabs.scheduling.model.Customer;
+import com.leaolabs.scheduling.model.Scheduling;
+import com.leaolabs.scheduling.model.TransferContract;
+import com.leaolabs.scheduling.v1.dtos.CustomerDto;
+import com.leaolabs.scheduling.v1.dtos.SchedulingDto;
+import com.leaolabs.scheduling.v1.dtos.TaxDto;
+import com.leaolabs.scheduling.v1.dtos.TransferContractDto;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Component
+<span class="fc" id="L17">public class TransferContractMapper {</span>
+    public TransferContractDto serialize(final TransferContract transferContract) {
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (Optional.ofNullable(transferContract).isEmpty()) {</span>
+<span class="nc" id="L20">            return new TransferContractDto();</span>
+        }
+
+<span class="fc" id="L23">        return TransferContractDto.builder()</span>
+<span class="fc" id="L24">                .id(transferContract.getId())</span>
+<span class="fc" id="L25">                .accountOrigin(transferContract.getAccountOrigin())</span>
+<span class="fc" id="L26">                .accountTarget(transferContract.getAccountTarget())</span>
+<span class="fc" id="L27">                .amount(transferContract.getAmount())</span>
+<span class="fc" id="L28">                .totalPaid(transferContract.getTotalPaid())</span>
+<span class="fc" id="L29">                .customer(CustomerDto.builder()</span>
+<span class="fc" id="L30">                        .id(transferContract.getCustomer().getId())</span>
+<span class="fc" id="L31">                        .cpf(transferContract.getCustomer().getCpf())</span>
+<span class="fc" id="L32">                        .name(transferContract.getCustomer().getName())</span>
+<span class="fc" id="L33">                        .build())</span>
+<span class="fc" id="L34">                .scheduling(SchedulingDto.builder()</span>
+<span class="fc" id="L35">                        .id(transferContract.getScheduling().getId())</span>
+<span class="fc" id="L36">                        .schedulingDate(transferContract.getScheduling().getSchedulingDate())</span>
+<span class="fc" id="L37">                        .transferDate(transferContract.getScheduling().getTransferDate())</span>
+<span class="fc" id="L38">                        .build())</span>
+<span class="fc" id="L39">                .tax(TaxDto.builder()</span>
+<span class="fc" id="L40">                        .id(transferContract.getTax().getId())</span>
+<span class="fc" id="L41">                        .amount(transferContract.getTax().getAmount())</span>
+<span class="fc" id="L42">                        .taxDescription(transferContract.getTax().getTaxDescription())</span>
+<span class="fc" id="L43">                        .build())</span>
+<span class="fc" id="L44">                .updatedAt(transferContract.getUpdatedAt())</span>
+<span class="fc" id="L45">                .createdAt(transferContract.getCreatedAt())</span>
+<span class="fc" id="L46">                .build();</span>
+    }
+
+    public List&lt;TransferContractDto&gt; serialize(final List&lt;TransferContract&gt; transferContracts) {
+<span class="fc" id="L50">        return Optional.ofNullable(transferContracts)</span>
+<span class="fc" id="L51">                .map(transferContracts1 -&gt; transferContracts.stream()</span>
+<span class="fc" id="L52">                        .map(this::serialize).collect(Collectors.toList())).orElse(null);</span>
+    }
+
+    public TransferContract deserialize(final TransferContractDto transferContractDto) {
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (Optional.ofNullable(transferContractDto).isEmpty()) {</span>
+<span class="nc" id="L57">            return new TransferContract();</span>
+        }
+
+<span class="fc" id="L60">        return TransferContract.builder()</span>
+<span class="fc" id="L61">                .id(transferContractDto.getId())</span>
+<span class="fc" id="L62">                .accountOrigin(transferContractDto.getAccountOrigin())</span>
+<span class="fc" id="L63">                .accountTarget(transferContractDto.getAccountTarget())</span>
+<span class="fc" id="L64">                .amount(transferContractDto.getAmount())</span>
+<span class="fc" id="L65">                .customer(Customer.builder()</span>
+<span class="fc" id="L66">                        .id(transferContractDto.getCustomer().getId())</span>
+<span class="fc" id="L67">                        .cpf(transferContractDto.getCustomer().getCpf())</span>
+<span class="fc" id="L68">                        .name(transferContractDto.getCustomer().getName())</span>
+<span class="fc" id="L69">                        .createdAt(transferContractDto.getCreatedAt())</span>
+<span class="fc" id="L70">                        .updatedAt(transferContractDto.getUpdatedAt())</span>
+<span class="fc" id="L71">                        .build())</span>
+<span class="fc" id="L72">                .scheduling(Scheduling.builder()</span>
+<span class="fc" id="L73">                        .id(transferContractDto.getScheduling().getId())</span>
+<span class="fc" id="L74">                        .schedulingDate(transferContractDto.getScheduling().getSchedulingDate())</span>
+<span class="fc" id="L75">                        .transferDate(transferContractDto.getScheduling().getTransferDate())</span>
+<span class="fc" id="L76">                        .createdAt(transferContractDto.getCreatedAt())</span>
+<span class="fc" id="L77">                        .updatedAt(transferContractDto.getUpdatedAt())</span>
+<span class="fc" id="L78">                        .build())</span>
+<span class="fc" id="L79">                .createdAt(transferContractDto.getCreatedAt())</span>
+<span class="fc" id="L80">                .updatedAt(transferContractDto.getUpdatedAt())</span>
+<span class="fc" id="L81">                .build();</span>
+    }
+
+    public List&lt;TransferContract&gt; deserialize(final List&lt;TransferContractDto&gt; transferContractDtos) {
+<span class="nc" id="L85">        return Optional.ofNullable(transferContractDtos)</span>
+<span class="nc" id="L86">                .map(transfer -&gt; transfer.stream()</span>
+<span class="nc" id="L87">                        .map(this::deserialize).collect(Collectors.toList())).orElse(null);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

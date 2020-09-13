@@ -27,6 +27,7 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
     private SchedulingRepository schedulingRepository;
     @Autowired
     private TransferContractRepository transferContractRepository;
+
     @Autowired
     private TaxBusiness taxBusiness;
 
@@ -38,7 +39,7 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
                 .transferDate(transferContract.getScheduling().getTransferDate())
                 .build());
 
-        var tax = this.taxBusiness.create(getTax(transferContract));
+        var tax = getTax(transferContract);
         var totalPaid = Double.parseDouble(tax.getAmount().toString())
                 + Double.parseDouble(transferContract.getAmount().toString());
 
@@ -77,10 +78,6 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
     }
 
     private Tax getTax(final TransferContract transferContract) {
-        var tax = taxBusiness.caculate(transferContract);
-        if (Optional.ofNullable(tax).isEmpty()) {
-            throw new EntityNotFoundException("Tax");
-        }
-        return tax;
+        return this.taxBusiness.caculate(transferContract);
     }
 }

@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Getter
-@Setter
 @Builder
 public class TaxDto {
     private Long id;

@@ -39,13 +39,39 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForTenDayRuleSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(5)))
+                .amount(BigDecimal.valueOf(3000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3060.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(60.00)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
     public void whenCreateTransferContractWhenTransferTodaySuccess() {
 
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.valueOf(3000.00))
                 .build();
 
@@ -58,6 +84,7 @@ public class TransferContractControllerTest {
                 .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
                 .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
                 .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3093.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(93.00)))
                 .andReturn()
                 .getResponse();
     }
@@ -70,7 +97,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -89,7 +116,7 @@ public class TransferContractControllerTest {
         this.mockMvc.perform(get(URI + "/customer?cpf=" + cpf)
                 .contentType(JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records", hasSize(2)))
                 .andReturn()
                 .getResponse();
     }
@@ -146,7 +173,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().name("Leonardo Nascimento Cintra").cpf("111").build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -168,7 +195,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().name("Leonardo Nascimento Cintra").cpf(BIG_STRING).build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -190,7 +217,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().name(BIG_STRING).cpf("11122233345").build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -212,7 +239,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().name("Test Name").build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -234,7 +261,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().name("").cpf("11122233387").build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -256,7 +283,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(CustomerDto.builder().cpf("11111122234").build())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -277,7 +304,7 @@ public class TransferContractControllerTest {
         var dto = TransferContractDto.builder()
                 .accountTarget("323232")
                 .accountOrigin("898989")
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -299,7 +326,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.valueOf(0.90))
                 .build();
 
@@ -321,7 +348,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.ZERO)
                 .build();
 
@@ -343,7 +370,7 @@ public class TransferContractControllerTest {
                 .accountTarget("323232")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .build();
 
         this.mockMvc.perform(post(URI)
@@ -364,7 +391,7 @@ public class TransferContractControllerTest {
                 .accountTarget("")
                 .accountOrigin("898989")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -385,7 +412,7 @@ public class TransferContractControllerTest {
         var dto = TransferContractDto.builder()
                 .accountOrigin("3898")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -407,7 +434,7 @@ public class TransferContractControllerTest {
                 .accountOrigin("3232")
                 .accountTarget(BIG_STRING)
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -429,7 +456,7 @@ public class TransferContractControllerTest {
                 .accountTarget("11111")
                 .accountOrigin("")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -450,7 +477,7 @@ public class TransferContractControllerTest {
         var dto = TransferContractDto.builder()
                 .accountTarget("11111")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -472,7 +499,7 @@ public class TransferContractControllerTest {
                 .accountOrigin(BIG_STRING)
                 .accountTarget("11111")
                 .customer(getFakeCustomerDto())
-                .scheduling(getFakeSchedulingDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now()))
                 .amount(BigDecimal.TEN)
                 .build();
 
@@ -486,9 +513,9 @@ public class TransferContractControllerTest {
                 .getResponse();
     }
 
-    private SchedulingDto getFakeSchedulingDto() {
+    private SchedulingDto getFakeSchedulingDto(LocalDate localDate) {
         return SchedulingDto.builder()
-                .transferDate(LocalDate.now())
+                .transferDate(localDate)
                 .build();
     }
 

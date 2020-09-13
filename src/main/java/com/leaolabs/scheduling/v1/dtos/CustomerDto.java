@@ -10,8 +10,6 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Builder
 public class CustomerDto implements Serializable {
 

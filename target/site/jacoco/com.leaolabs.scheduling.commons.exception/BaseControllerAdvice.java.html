@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseControllerAdvice.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">scheduling</a> &gt; <a href="index.source.html" class="el_package">com.leaolabs.scheduling.commons.exception</a> &gt; <span class="el_source">BaseControllerAdvice.java</span></div><h1>BaseControllerAdvice.java</h1><pre class="source lang-java linenums">package com.leaolabs.scheduling.commons.exception;
+
+import com.leaolabs.scheduling.commons.controller.ResponseMeta;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.text.MessageFormat;
+import java.util.*;
+
+import static java.text.MessageFormat.format;
+
+@ControllerAdvice
+<span class="fc" id="L19">public class BaseControllerAdvice {</span>
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public List&lt;ResponseMeta.ErrorMessage&gt; exception(final EntityNotFoundException ex) {
+<span class="nc" id="L25">        return Collections.singletonList(ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L26">                .developerMessage(</span>
+<span class="nc" id="L27">                        format(&quot;{0} not found&quot;, ex.getParameters()))</span>
+<span class="nc" id="L28">                .userMessage(</span>
+<span class="nc" id="L29">                        format(&quot;You attempted to get a {0}, but did not find any&quot;, ex.getParameters()))</span>
+<span class="nc" id="L30">                .build());</span>
+    }
+
+    @ResponseBody
+    @ExceptionHandler(MissingParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List&lt;ResponseMeta.ErrorMessage&gt; exceptionHandler(final MissingParameterException ex) {
+<span class="nc" id="L37">        return Collections.singletonList(ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L38">                .developerMessage(</span>
+<span class="nc" id="L39">                        format(&quot;Missing {0} parameter {1}&quot;, ex.getParameters()))</span>
+<span class="nc" id="L40">                .userMessage(</span>
+<span class="nc" id="L41">                        format(&quot;Field {1} is required and can not be empty&quot;, ex.getParameters()))</span>
+<span class="nc" id="L42">                .build());</span>
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public List&lt;ResponseMeta.ErrorMessage&gt; exception(final MethodArgumentNotValidException ex) {
+
+<span class="fc" id="L50">        final List&lt;FieldError&gt; fields = ex.getBindingResult().getFieldErrors();</span>
+
+<span class="fc" id="L52">        final List&lt;ResponseMeta.ErrorMessage&gt; errorMessages = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L54">        fields.forEach(field -&gt; {</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (&quot;NotNull&quot;.equalsIgnoreCase(field.getCode())</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                    || &quot;NotBlank&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="fc" id="L59">                errorMessages.add(</span>
+<span class="fc" id="L60">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="fc" id="L61">                                .developerMessage(</span>
+<span class="fc" id="L62">                                        format(&quot;Missing body parameter {0}&quot;, field.getField()))</span>
+<span class="fc" id="L63">                                .userMessage(</span>
+<span class="fc" id="L64">                                        format(&quot;Field {0} is required and can not be empty&quot;, field.getField()))</span>
+<span class="fc" id="L65">                                .build());</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            } else if (&quot;FutureOrPresent&quot;.equalsIgnoreCase(field.getCode())) {</span>
+<span class="fc" id="L68">                errorMessages.add(</span>
+<span class="fc" id="L69">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="fc" id="L70">                                .developerMessage(</span>
+<span class="fc" id="L71">                                        format(&quot;Field {0} cannot be in the past&quot;, field.getField()))</span>
+<span class="fc" id="L72">                                .userMessage(</span>
+<span class="fc" id="L73">                                        format(&quot;Field {0} cannot be in the past&quot;, field.getField()))</span>
+<span class="fc" id="L74">                                .build());</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            } else if (&quot;DecimalMin&quot;.equalsIgnoreCase(field.getCode())) {</span>
+<span class="fc" id="L76">                errorMessages.add(</span>
+<span class="fc" id="L77">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="fc" id="L78">                                .developerMessage(</span>
+<span class="fc" id="L79">                                        format(</span>
+                                                &quot;Invalid body parameter {0}&quot;
+                                                        + &quot; - it must be filled with a value greater than {1}&quot;,
+<span class="fc" id="L82">                                                field.getField(),</span>
+<span class="fc" id="L83">                                                field.getRejectedValue()))</span>
+<span class="fc" id="L84">                                .userMessage(</span>
+<span class="fc" id="L85">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a value greater than {1}&quot;,
+<span class="fc" id="L87">                                                field.getField(),</span>
+<span class="fc" id="L88">                                                field.getRejectedValue()))</span>
+<span class="fc" id="L89">                                .build());</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            } else if (&quot;Min&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="nc" id="L92">                errorMessages.add(</span>
+<span class="nc" id="L93">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L94">                                .developerMessage(</span>
+<span class="nc" id="L95">                                        format(</span>
+                                                &quot;Invalid body parameter {0}&quot;
+                                                        + &quot; - it must be filled with a value greater than {1}&quot;,
+<span class="nc" id="L98">                                                field.getField(),</span>
+<span class="nc" id="L99">                                                this.getValue(field)))</span>
+<span class="nc" id="L100">                                .userMessage(</span>
+<span class="nc" id="L101">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a value greater than {1}&quot;,
+<span class="nc" id="L103">                                                field.getField(),</span>
+<span class="nc" id="L104">                                                this.getValue(field)))</span>
+<span class="nc" id="L105">                                .build());</span>
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            } else if (&quot;Max&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="nc" id="L109">                errorMessages.add(</span>
+<span class="nc" id="L110">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L111">                                .developerMessage(</span>
+<span class="nc" id="L112">                                        format(</span>
+                                                &quot;Invalid body parameter {0}&quot;
+                                                        + &quot; - it must be filled with a value lesser than {1}&quot;,
+<span class="nc" id="L115">                                                field.getField(),</span>
+<span class="nc" id="L116">                                                this.getValue(field)))</span>
+<span class="nc" id="L117">                                .userMessage(</span>
+<span class="nc" id="L118">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a value lesser than {1}&quot;,
+<span class="nc" id="L120">                                                field.getField(),</span>
+<span class="nc" id="L121">                                                this.getValue(field)))</span>
+<span class="nc" id="L122">                                .build());</span>
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            } else if (&quot;Email&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="nc" id="L126">                errorMessages.add(</span>
+<span class="nc" id="L127">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L128">                                .developerMessage(</span>
+<span class="nc" id="L129">                                        format(</span>
+                                                &quot;Invalid body parameter {0} - it must be filled with a valid email&quot;,
+<span class="nc" id="L131">                                                field.getField()))</span>
+<span class="nc" id="L132">                                .userMessage(</span>
+<span class="nc" id="L133">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a valid email&quot;,
+<span class="nc" id="L135">                                                field.getField()))</span>
+<span class="nc" id="L136">                                .build());</span>
+
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            } else if (&quot;cpf&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="nc" id="L140">                errorMessages.add(</span>
+<span class="nc" id="L141">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L142">                                .developerMessage(</span>
+<span class="nc" id="L143">                                        format(</span>
+                                                &quot;Invalid body parameter {0} - it must be filled with a valid CPF&quot;,
+<span class="nc" id="L145">                                                field.getField()))</span>
+<span class="nc" id="L146">                                .userMessage(</span>
+<span class="nc" id="L147">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a valid CPF&quot;,
+<span class="nc" id="L149">                                                field.getField()))</span>
+<span class="nc" id="L150">                                .build());</span>
+
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            } else if (&quot;cnpj&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="nc" id="L154">                errorMessages.add(</span>
+<span class="nc" id="L155">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L156">                                .developerMessage(</span>
+<span class="nc" id="L157">                                        format(</span>
+                                                &quot;Invalid body parameter {0} - it must be filled with a valid CNPJ&quot;,
+<span class="nc" id="L159">                                                field.getField()))</span>
+<span class="nc" id="L160">                                .userMessage(</span>
+<span class="nc" id="L161">                                        format(</span>
+                                                &quot;Invalid field {0} - it must be filled with a valid CNPJ&quot;,
+<span class="nc" id="L163">                                                field.getField()))</span>
+<span class="nc" id="L164">                                .build());</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            } else if (&quot;size&quot;.equalsIgnoreCase(field.getCode())) {</span>
+
+<span class="fc" id="L167">                Integer param01 = Integer.valueOf(field.getArguments()[1].toString());</span>
+<span class="fc" id="L168">                Integer param02 = Integer.valueOf(field.getArguments()[2].toString());</span>
+
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (field.getRejectedValue().toString().length() &gt; param01</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">                        &amp;&amp; field.getRejectedValue().toString().length() &gt; param02) {</span>
+<span class="fc" id="L172">                    errorMessages.add(ResponseMeta.ErrorMessage.builder()</span>
+<span class="fc" id="L173">                            .developerMessage(</span>
+<span class="fc" id="L174">                                    format(</span>
+                                            &quot;Invalid body parameter {0} - &quot;
+                                                    + &quot;it must be filled with a value lesser or equals than {1}&quot;,
+<span class="fc" id="L177">                                            field.getField(),</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                                            param01 &gt; param02 ? param01 : param02))</span>
+<span class="fc" id="L179">                            .userMessage(</span>
+<span class="fc" id="L180">                                    format(</span>
+                                            &quot;Invalid field {0} - &quot;
+                                                    + &quot;it must be filled with a value lesser or equals than {1}&quot;,
+<span class="fc" id="L183">                                            field.getField(),</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">                                            param01 &gt; param02 ? param01 : param02))</span>
+<span class="fc" id="L185">                            .build());</span>
+                } else {
+<span class="fc" id="L187">                    errorMessages.add(</span>
+<span class="fc" id="L188">                            ResponseMeta.ErrorMessage.builder()</span>
+<span class="fc" id="L189">                                    .developerMessage(</span>
+<span class="fc" id="L190">                                            format(</span>
+                                                    &quot;Invalid body parameter {0} - &quot;
+                                                            + &quot;it must be filled with a value greater or equals than {1}&quot;,
+<span class="fc" id="L193">                                                    field.getField(),</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                                                    param01 &gt; param02 ? param02 : param01))</span>
+<span class="fc" id="L195">                                    .userMessage(</span>
+<span class="fc" id="L196">                                            format(</span>
+                                                    &quot;Invalid field {0} - &quot;
+                                                            + &quot;it must be filled with a value greater or equals than {1}&quot;,
+<span class="fc" id="L199">                                                    field.getField(),</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">                                                    param01 &gt; param02 ? param02 : param01))</span>
+<span class="fc" id="L201">                                    .build());</span>
+                }
+<span class="fc" id="L203">            } else {</span>
+
+<span class="nc" id="L205">                errorMessages.add(</span>
+<span class="nc" id="L206">                        ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L207">                                .developerMessage(&quot;Malformed request body&quot;)</span>
+<span class="nc" id="L208">                                .userMessage(&quot;Malformed request body&quot;)</span>
+<span class="nc" id="L209">                                .build());</span>
+            }
+<span class="fc" id="L211">        });</span>
+
+<span class="fc" id="L213">        return errorMessages;</span>
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public List&lt;ResponseMeta.ErrorMessage&gt; exception(final MethodArgumentTypeMismatchException ex) {
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        if (ex.getRequiredType() == UUID.class) {</span>
+<span class="nc" id="L221">            return Collections.singletonList(ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L222">                    .developerMessage(</span>
+<span class="nc" id="L223">                            MessageFormat.format(</span>
+                                    &quot;Invalid parameter {0} - it must be filled with a valid UUID&quot;,
+<span class="nc" id="L225">                                    ex.getName()))</span>
+<span class="nc" id="L226">                    .userMessage(MessageFormat.format(</span>
+<span class="nc" id="L227">                            &quot;Invalid field {0} - it must be filled with a valid UUID&quot;, ex.getName()))</span>
+<span class="nc" id="L228">                    .build());</span>
+        } else {
+<span class="nc" id="L230">            return Collections.singletonList(ResponseMeta.ErrorMessage.builder()</span>
+<span class="nc" id="L231">                    .developerMessage(</span>
+<span class="nc" id="L232">                            MessageFormat.format(&quot;Invalid query parameter {0} - it is not allowed&quot;,</span>
+<span class="nc" id="L233">                                    ex.getName() + &quot;=&quot; + ex.getValue()))</span>
+<span class="nc" id="L234">                    .userMessage(MessageFormat.format(</span>
+<span class="nc" id="L235">                            &quot;Invalid field {0} - it is not allowed&quot;, ex.getName()))</span>
+<span class="nc" id="L236">                    .build());</span>
+        }
+    }
+
+    private Long getValue(final FieldError fieldError) {
+<span class="nc" id="L241">        return (Long) Optional.ofNullable(fieldError.getArguments())</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">                .filter(t -&gt; t.length &gt; 1)</span>
+<span class="nc" id="L243">                .map(t -&gt; t[1])</span>
+<span class="nc" id="L244">                .orElse(null);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -12,8 +12,6 @@ import java.time.ZonedDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Builder
 public class SchedulingDto implements Serializable {
 
