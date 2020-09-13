@@ -5,6 +5,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
@@ -22,4 +23,8 @@ public class CustomerDto implements Serializable {
     @NotBlank
     @Size(max = 11, min = 11)
     private String cpf;
+
+    private ZonedDateTime createdAt;
+
+    private ZonedDateTime updatedAt;
 }

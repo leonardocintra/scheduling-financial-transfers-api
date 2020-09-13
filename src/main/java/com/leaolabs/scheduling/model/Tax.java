@@ -4,11 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tax")
@@ -23,4 +22,10 @@ public class Tax {
 
     @Column(nullable = false)
     private String taxDescription;
+
+    @Column(name = "created_at")
+    private ZonedDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private ZonedDateTime updatedAt;
 }

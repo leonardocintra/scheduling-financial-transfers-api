@@ -39,6 +39,132 @@ public class TransferContractControllerTest {
 
     @Test
     @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForOperationTypeCTax2PercentSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(55)))
+                .amount(BigDecimal.valueOf(300000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(300000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(306000.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(6000.00)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForOperationTypeCTax4PercentSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(35)))
+                .amount(BigDecimal.valueOf(3000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3120.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(120.00)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForOperationTypeCTax6PercentSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(22)))
+                .amount(BigDecimal.valueOf(3000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3180.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(180.00)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForOperationTypeCTax8PercentSuccess() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(11)))
+                .amount(BigDecimal.valueOf(3000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.records", hasSize(1)))
+                .andExpect(jsonPath("$.records[0].accountTarget", Matchers.is("323232")))
+                .andExpect(jsonPath("$.records[0].accountOrigin", Matchers.is("898989")))
+                .andExpect(jsonPath("$.records[0].amount", Matchers.is(3000.00)))
+                .andExpect(jsonPath("$.records[0].totalPaid", Matchers.is(3240.00)))
+                .andExpect(jsonPath("$.records[0].tax.amount", Matchers.is(240.00)))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenCreateTransferContractWhenTransferForOperationTypeCAndTaxNotFound() {
+
+        var dto = TransferContractDto.builder()
+                .accountTarget("323232")
+                .accountOrigin("898989")
+                .customer(getFakeCustomerDto())
+                .scheduling(getFakeSchedulingDto(LocalDate.now().plusDays(50)))
+                .amount(BigDecimal.valueOf(3000.00))
+                .build();
+
+        this.mockMvc.perform(post(URI)
+                .contentType(JSON)
+                .content(objectMapper.writeValueAsBytes(dto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.[0].developerMessage", Matchers.is("Tax not found")))
+                .andExpect(jsonPath("$.[0].userMessage", Matchers.is("You attempted to get a Tax, but did not find any")))
+                .andReturn()
+                .getResponse();
+    }
+
+    @Test
+    @SneakyThrows
     public void whenCreateTransferContractWhenTransferForTenDayRuleSuccess() {
 
         var dto = TransferContractDto.builder()
@@ -116,7 +242,7 @@ public class TransferContractControllerTest {
         this.mockMvc.perform(get(URI + "/customer?cpf=" + cpf)
                 .contentType(JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.records", hasSize(2)))
+                .andExpect(jsonPath("$.records", hasSize(5)))
                 .andReturn()
                 .getResponse();
     }

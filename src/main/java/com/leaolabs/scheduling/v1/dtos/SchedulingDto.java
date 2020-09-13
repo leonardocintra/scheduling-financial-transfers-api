@@ -23,4 +23,8 @@ public class SchedulingDto implements Serializable {
     @NotNull
     private LocalDate transferDate;
 
+    private ZonedDateTime createdAt;
+
+    private ZonedDateTime updatedAt;
+
 }

@@ -121,47 +121,6 @@ public class BaseControllerAdvice {
                                                 this.getValue(field)))
                                 .build());
 
-            } else if ("Email".equalsIgnoreCase(field.getCode())) {
-
-                errorMessages.add(
-                        ResponseMeta.ErrorMessage.builder()
-                                .developerMessage(
-                                        format(
-                                                "Invalid body parameter {0} - it must be filled with a valid email",
-                                                field.getField()))
-                                .userMessage(
-                                        format(
-                                                "Invalid field {0} - it must be filled with a valid email",
-                                                field.getField()))
-                                .build());
-
-            } else if ("cpf".equalsIgnoreCase(field.getCode())) {
-
-                errorMessages.add(
-                        ResponseMeta.ErrorMessage.builder()
-                                .developerMessage(
-                                        format(
-                                                "Invalid body parameter {0} - it must be filled with a valid CPF",
-                                                field.getField()))
-                                .userMessage(
-                                        format(
-                                                "Invalid field {0} - it must be filled with a valid CPF",
-                                                field.getField()))
-                                .build());
-
-            } else if ("cnpj".equalsIgnoreCase(field.getCode())) {
-
-                errorMessages.add(
-                        ResponseMeta.ErrorMessage.builder()
-                                .developerMessage(
-                                        format(
-                                                "Invalid body parameter {0} - it must be filled with a valid CNPJ",
-                                                field.getField()))
-                                .userMessage(
-                                        format(
-                                                "Invalid field {0} - it must be filled with a valid CNPJ",
-                                                field.getField()))
-                                .build());
             } else if ("size".equalsIgnoreCase(field.getCode())) {
 
                 Integer param01 = Integer.valueOf(field.getArguments()[1].toString());
