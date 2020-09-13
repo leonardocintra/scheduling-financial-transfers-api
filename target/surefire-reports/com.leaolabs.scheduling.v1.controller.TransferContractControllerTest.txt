@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.leaolabs.scheduling.v1.controller.TransferContractControllerTest
--------------------------------------------------------------------------------
-Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.74 s - in com.leaolabs.scheduling.v1.controller.TransferContractControllerTest
