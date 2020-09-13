@@ -4,24 +4,29 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 @Getter
-<span class="pc" id="L9">@Setter</span>
-<span class="nc" id="L10">@Builder</span>
-<span class="nc" id="L11">@AllArgsConstructor</span>
-<span class="fc" id="L12">@NoArgsConstructor</span>
+<span class="pc" id="L10">@Setter</span>
+<span class="fc" id="L11">@NoArgsConstructor</span>
 @Entity
 @Table(name = &quot;tax&quot;)
 public class Tax {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="fc" id="L19">    private Long id;</span>
+<span class="fc" id="L18">    private Long id;</span>
 
     @Column(nullable = false)
-<span class="fc" id="L22">    private BigDecimal amount;</span>
+<span class="fc" id="L21">    private BigDecimal amount;</span>
 
     @Column(nullable = false)
-<span class="fc" id="L25">    private String taxDescription;</span>
+<span class="fc" id="L24">    private String taxDescription;</span>
+
+    @Column(name = &quot;created_at&quot;)
+<span class="fc" id="L27">    private ZonedDateTime createdAt;</span>
+
+    @Column(name = &quot;updated_at&quot;)
+<span class="fc" id="L30">    private ZonedDateTime updatedAt;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

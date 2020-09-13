@@ -4,12 +4,12 @@ public class BaseControllerException extends RuntimeException {
 
     private final Object[] parameters;
 
-<span class="nc" id="L7">    public BaseControllerException(final Object... parameters) {</span>
-<span class="nc" id="L8">        this.parameters = parameters;</span>
-<span class="nc" id="L9">    }</span>
+<span class="fc" id="L7">    public BaseControllerException(final Object... parameters) {</span>
+<span class="fc" id="L8">        this.parameters = parameters;</span>
+<span class="fc" id="L9">    }</span>
 
     public Object[] getParameters() {
-<span class="nc" id="L12">        return this.parameters.clone();</span>
+<span class="fc" id="L12">        return this.parameters.clone();</span>
     }
 }
 

@@ -7,6 +7,7 @@ com/leaolabs/scheduling/commons/controller/ResponseMeta$ErrorMessage.class
 com/leaolabs/scheduling/model/TransferContract.class
 com/leaolabs/scheduling/repository/CustomerRepository.class
 com/leaolabs/scheduling/v1/dtos/SchedulingDto.class
+com/leaolabs/scheduling/commons/utils/Utils.class
 com/leaolabs/scheduling/v1/dtos/CustomerDto$CustomerDtoBuilder.class
 com/leaolabs/scheduling/commons/converter/CaseInsensitiveConverter.class
 com/leaolabs/scheduling/repository/TransferContractRepository.class
@@ -18,7 +19,6 @@ com/leaolabs/scheduling/commons/exception/EntityNotFoundException.class
 com/leaolabs/scheduling/commons/controller/OffsetLimitRequest.class
 com/leaolabs/scheduling/model/TransferContract$TransferContractBuilder.class
 com/leaolabs/scheduling/business/impl/TaxBusinessImpl.class
-com/leaolabs/scheduling/model/Tax$TaxBuilder.class
 com/leaolabs/scheduling/v1/dtos/TransferContractDto.class
 com/leaolabs/scheduling/business/impl/TransferContractBusinessImpl.class
 com/leaolabs/scheduling/commons/controller/ResponseMeta.class

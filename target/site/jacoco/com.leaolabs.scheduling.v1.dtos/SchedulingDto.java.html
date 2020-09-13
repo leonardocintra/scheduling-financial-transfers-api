@@ -12,18 +12,20 @@ import java.time.ZonedDateTime;
 <span class="fc" id="L12">@Setter</span>
 <span class="fc" id="L13">@NoArgsConstructor</span>
 <span class="fc" id="L14">@AllArgsConstructor</span>
-<span class="nc bnc" id="L15" title="All 30 branches missed.">@EqualsAndHashCode</span>
-<span class="nc" id="L16">@ToString</span>
-<span class="pc" id="L17">@Builder</span>
+<span class="pc" id="L15">@Builder</span>
 public class SchedulingDto implements Serializable {
 
-<span class="fc" id="L20">    private Long id;</span>
+<span class="fc" id="L18">    private Long id;</span>
 
-<span class="fc" id="L22">    private ZonedDateTime schedulingDate;</span>
+<span class="fc" id="L20">    private ZonedDateTime schedulingDate;</span>
 
     @FutureOrPresent
     @NotNull
-<span class="fc" id="L26">    private LocalDate transferDate;</span>
+<span class="fc" id="L24">    private LocalDate transferDate;</span>
+
+<span class="fc" id="L26">    private ZonedDateTime createdAt;</span>
+
+<span class="fc" id="L28">    private ZonedDateTime updatedAt;</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

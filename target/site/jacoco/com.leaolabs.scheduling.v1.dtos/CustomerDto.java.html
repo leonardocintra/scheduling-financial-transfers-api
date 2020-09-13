@@ -5,24 +5,27 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Getter
-<span class="fc" id="L10">@Setter</span>
-<span class="fc" id="L11">@NoArgsConstructor</span>
-<span class="fc" id="L12">@AllArgsConstructor</span>
-<span class="nc bnc" id="L13" title="All 30 branches missed.">@EqualsAndHashCode</span>
-<span class="nc" id="L14">@ToString</span>
-<span class="pc" id="L15">@Builder</span>
+<span class="fc" id="L11">@Setter</span>
+<span class="fc" id="L12">@NoArgsConstructor</span>
+<span class="fc" id="L13">@AllArgsConstructor</span>
+<span class="pc" id="L14">@Builder</span>
 public class CustomerDto implements Serializable {
 
-<span class="fc" id="L18">    private Long id;</span>
+<span class="fc" id="L17">    private Long id;</span>
 
     @NotBlank
     @Size(max = 100)
-<span class="fc" id="L22">    private String name;</span>
+<span class="fc" id="L21">    private String name;</span>
 
     @NotBlank
     @Size(max = 11, min = 11)
-<span class="fc" id="L26">    private String cpf;</span>
+<span class="fc" id="L25">    private String cpf;</span>
+
+<span class="fc" id="L27">    private ZonedDateTime createdAt;</span>
+
+<span class="fc" id="L29">    private ZonedDateTime updatedAt;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
