@@ -1,11 +1,10 @@
 package com.leaolabs.scheduling.business.impl;
 
-import com.leaolabs.scheduling.business.TaxBusiness;
+import com.leaolabs.scheduling.business.TaxOperation;
 import com.leaolabs.scheduling.business.TransferContractBusiness;
 import com.leaolabs.scheduling.commons.exception.EntityNotFoundException;
 import com.leaolabs.scheduling.model.Customer;
 import com.leaolabs.scheduling.model.Scheduling;
-import com.leaolabs.scheduling.model.Tax;
 import com.leaolabs.scheduling.model.TransferContract;
 import com.leaolabs.scheduling.repository.CustomerRepository;
 import com.leaolabs.scheduling.repository.SchedulingRepository;
@@ -27,9 +26,8 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
     private SchedulingRepository schedulingRepository;
     @Autowired
     private TransferContractRepository transferContractRepository;
-
     @Autowired
-    private TaxBusiness taxBusiness;
+    private TaxOperation taxOperation;
 
     @Override
     public Optional<TransferContract> create(final TransferContract transferContract) {
@@ -39,7 +37,7 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
                 .transferDate(transferContract.getScheduling().getTransferDate())
                 .build());
 
-        var tax = getTax(transferContract);
+        var tax = this.taxOperation.getTax(transferContract);
         var totalPaid = Double.parseDouble(tax.getAmount().toString())
                 + Double.parseDouble(transferContract.getAmount().toString());
 
@@ -75,9 +73,5 @@ public class TransferContractBusinessImpl implements TransferContractBusiness {
             customer = optionalCustomer.get();
         }
         return customer;
-    }
-
-    private Tax getTax(final TransferContract transferContract) {
-        return this.taxBusiness.caculate(transferContract);
     }
 }

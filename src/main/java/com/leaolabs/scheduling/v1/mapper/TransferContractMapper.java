@@ -86,10 +86,4 @@ public class TransferContractMapper {
                 .updatedAt(transferContractDto.getUpdatedAt())
                 .build();
     }
-
-    public List<TransferContract> deserialize(final List<TransferContractDto> transferContractDtos) {
-        return Optional.ofNullable(transferContractDtos)
-                .map(transfer -> transfer.stream()
-                        .map(this::deserialize).collect(Collectors.toList())).orElse(null);
-    }
 }

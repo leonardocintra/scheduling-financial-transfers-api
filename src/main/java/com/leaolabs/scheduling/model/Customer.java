@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
 @Getter
-@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
