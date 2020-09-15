@@ -51,6 +51,8 @@ Was requested by the client to be developed in the latest version of java.
 ## Playground
 Eepending on the amount and scheduling date there is a **fee to be paid** on the transfer
 
+### Create a transfer
+
 REQUEST
 ```
 {
@@ -124,6 +126,11 @@ RESPONSE
 - **createdAt**: date time the registration with the bank occurred
 - **updatedAt**: date time the update with the bank occurred
 
+
+### Get a transfer by CPF
+- GET http://localhost:8080/v1/scheduling/transfer/customer?cpf=21122233344
+
+will return all appointments! :smile: :smile: 
 
 ## doubts? I am available
 leonardo.ncintra@outlook.com
