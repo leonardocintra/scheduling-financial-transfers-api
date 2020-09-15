@@ -4,13 +4,17 @@
 
 ## How to use
 ### Requisites
-- Java 14
-- Maven
+- Java 14 (recommended to use the [sdkman](https://sdkman.io/))
+- [Maven](https://maven.apache.org/)
+- IDE (Visual Studio Code, IntelliJ, Eclipse, etc)
 
 ### Usage
 ```
 git clone https://github.com/leonardocintra/scheduling-financial-transfers-api
+cd scheduling-financial-transfers-api
 ```
+
+Open in your favorite IDE
 
 ### Run tests
 ```
