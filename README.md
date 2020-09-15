@@ -78,7 +78,7 @@ REQUEST
 - **customer**: client's data
 - **accountOrigin**: account origin
 - **accountTarget**: account target
-- **scheduling**: transfer data
+- **scheduling**: transfer data in format yyyy-MM-dd
 
 RESPONSE
 ```
