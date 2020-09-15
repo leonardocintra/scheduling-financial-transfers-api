@@ -49,9 +49,14 @@ Was requested by the client to be developed in the latest version of java.
 
 
 ## Playground
-Eepending on the amount and scheduling date there is a **fee to be paid** on the transfer
+
+### Postman collection
+[Download here](https://www.getpostman.com/collections/c8d14cd9bd4833aa26e7)
+
 
 ### Create a transfer
+
+Eepending on the amount and scheduling date there is a **fee to be paid** on the transfer
 
 REQUEST
 ```
