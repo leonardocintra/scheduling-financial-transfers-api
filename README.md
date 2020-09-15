@@ -48,5 +48,83 @@ Was requested by the client to be developed in the latest version of java.
 - It helps to optimize your time and increase your productivity, as it simplifies application development.
 
 
+## Playground
+Eepending on the amount and scheduling date there is a **fee to be paid** on the transfer
 
+REQUEST
+```
+{
+    "amount": 100.00,
+    "customer": {
+        "name": "Airton Senna",
+        "cpf": "21122233344"
+    },
+    "accountOrigin": "333311",
+    "accountTarget": "444444",
+    "scheduling": {
+        "transferDate": "2020-10-15"
+    }
+}
+```
+:warning: all are required fields
+- **amount**: amount to transfer
+- **customer**: client's data
+- **accountOrigin**: account origin
+- **accountTarget**: account target
+- **scheduling**: transfer data
+
+RESPONSE
+```
+{
+    "meta": {
+        "version": "'0.0.1'",
+        "server": "pc",
+        "recordCount": 1,
+        "limit": 50,
+        "offset": 0
+    },
+    "records": [
+        {
+            "id": 1,
+            "accountOrigin": "333311",
+            "accountTarget": "444444",
+            "amount": 100.00,
+            "totalPaid": 104.0,
+            "customer": {
+                "id": 1,
+                "name": "Airton Senna",
+                "cpf": "21122233344",
+                "createdAt": "2020-09-14T22:10:34.674034-03:00",
+                "updatedAt": "2020-09-14T22:10:34.674034-03:00"
+            },
+            "scheduling": {
+                "id": 1,
+                "schedulingDate": "2020-09-14T22:10:34.708174-03:00",
+                "transferDate": "2020-10-15",
+                "createdAt": "2020-09-14T22:10:34.708174-03:00",
+                "updatedAt": "2020-09-14T22:10:34.708174-03:00"
+            },
+            "tax": {
+                "id": 1,
+                "amount": 4.0,
+                "taxDescription": "Operações do tipo C tem uma taxa regressiva conforme a data de transferência: de 10 até 20 dias: 8% de 20 até 30 dias: 6% de 30 até 40 dias: 4% de 40 dias ou mais e valor superior a 100.000: 2%",
+                "createdAt": "2020-09-14T22:10:34.714161-03:00",
+                "updatedAt": "2020-09-14T22:10:34.714161-03:00"
+            },
+            "createdAt": "2020-09-14T22:10:34.727547-03:00",
+            "updatedAt": "2020-09-14T22:10:34.727547-03:00"
+        }
+    ],
+    "errorMessages": null
+}
+```
+- **totalPaid**: transfer amount plus fee amount
+- **tax**: rate details
+- **errorMessages**: if there is an error, it will appear here
+- **createdAt**: date time the registration with the bank occurred
+- **updatedAt**: date time the update with the bank occurred
+
+
+## doubts? I am available
+leonardo.ncintra@outlook.com
 

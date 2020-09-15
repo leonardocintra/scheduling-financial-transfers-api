@@ -28,4 +28,9 @@ public class Tax {
 
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
+
+    @PrePersist
+    protected void prePersist() {
+        createdAt = updatedAt = ZonedDateTime.now();
+    }
 }

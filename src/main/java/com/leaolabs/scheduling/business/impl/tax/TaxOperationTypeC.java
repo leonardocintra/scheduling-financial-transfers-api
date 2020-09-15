@@ -27,10 +27,10 @@ public class TaxOperationTypeC implements TaxBusiness {
         final var taxPercentage = utils.calculatePercentage(taxPercentageToCalculate, Double.parseDouble(transferContract.getAmount().toString()));
 
         tax.setAmount(BigDecimal.valueOf(taxPercentage));
-        tax.setTaxDescription("Operações do tipo C tem uma taxa regressiva conforme a data de transferência: \n" +
-                "de 10 até 20 dias: 8% \n " +
-                "de 20 até 30 dias: 6% \n " +
-                "de 30 até 40 dias: 4% \n " +
+        tax.setTaxDescription("Operações do tipo C tem uma taxa regressiva conforme a data de transferência: " +
+                "de 10 até 20 dias: 8% " +
+                "de 20 até 30 dias: 6% " +
+                "de 30 até 40 dias: 4% " +
                 "de 40 dias ou mais e valor superior a 100.000: 2%");
 
         return this.taxRepository.save(tax);
